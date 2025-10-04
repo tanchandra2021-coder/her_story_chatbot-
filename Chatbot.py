@@ -20,8 +20,7 @@ leaders = {
         "style": "inspiring and empowering",
         "expertise": ["Impact Investing", "Education Finance", "Nonprofit Strategy"],
         "image": "michelle_obama.png",
-        "color": "#FF6B9D",
-        "emoji": "🌸"
+        "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
     },
     "Angela Merkel": {
         "title": "Economic Policy Expert",
@@ -29,8 +28,7 @@ leaders = {
         "style": "analytical and methodical",
         "expertise": ["Fiscal Policy", "European Markets", "Economic Strategy"],
         "image": "Angela_Merkel.png",
-        "color": "#C084FC",
-        "emoji": "💜"
+        "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
     },
     "Malala Yousafzai": {
         "title": "Social Finance Advocate",
@@ -38,8 +36,7 @@ leaders = {
         "style": "passionate and principled",
         "expertise": ["Microfinance", "Social Bonds", "Education Funding"],
         "image": "Malala_Yousafazi.png",
-        "color": "#F472B6",
-        "emoji": "🦋"
+        "gradient": "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
     },
     "Ruth Bader Ginsburg": {
         "title": "Financial Law & Ethics",
@@ -47,8 +44,7 @@ leaders = {
         "style": "precise and principled",
         "expertise": ["Financial Law", "Securities", "Compliance"],
         "image": "Ruth_Bader_Ginsburg.png",
-        "color": "#FCA5A5",
-        "emoji": "⚖️"
+        "gradient": "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
     },
     "Indra Nooyi": {
         "title": "Corporate Finance Leader",
@@ -56,8 +52,7 @@ leaders = {
         "style": "strategic and visionary",
         "expertise": ["Corporate Finance", "M&A", "Business Strategy"],
         "image": "Indra_Nooyi.png",
-        "color": "#A78BFA",
-        "emoji": "✨"
+        "gradient": "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
     },
     "Sheryl Sandberg": {
         "title": "Tech Finance Executive",
@@ -65,8 +60,7 @@ leaders = {
         "style": "analytical and motivational",
         "expertise": ["Tech Finance", "Scaling", "Operations"],
         "image": "Sheryl_Sandberg.png",
-        "color": "#F9A8D4",
-        "emoji": "💎"
+        "gradient": "linear-gradient(135deg, #30cfd0 0%, #330867 100%)"
     },
     "Jacinda Ardern": {
         "title": "Wellbeing Economics",
@@ -74,8 +68,7 @@ leaders = {
         "style": "empathetic and pragmatic",
         "expertise": ["Public Finance", "Budget Policy", "Wellbeing Economy"],
         "image": "Jacinda_Ardern.png",
-        "color": "#FDA4AF",
-        "emoji": "🌺"
+        "gradient": "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
     },
     "Mae Jemison": {
         "title": "STEM Finance Pioneer",
@@ -83,8 +76,7 @@ leaders = {
         "style": "innovative and scientific",
         "expertise": ["Venture Capital", "R&D Finance", "Tech Investment"],
         "image": "Mae_Jemison.png",
-        "color": "#DDA0DD",
-        "emoji": "🚀"
+        "gradient": "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
     },
     "Reshma Saujani": {
         "title": "Startup Finance Advocate",
@@ -92,8 +84,7 @@ leaders = {
         "style": "bold and resourceful",
         "expertise": ["Fundraising", "Startup Equity", "Angel Investing"],
         "image": "Reshman_Saujani.png",
-        "color": "#E879F9",
-        "emoji": "💖"
+        "gradient": "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)"
     },
     "Sara Blakely": {
         "title": "Bootstrap Finance Expert",
@@ -101,8 +92,7 @@ leaders = {
         "style": "creative and determined",
         "expertise": ["Bootstrapping", "Cash Flow", "Wealth Building"],
         "image": "Sara_Blakely.png",
-        "color": "#FBCFE8",
-        "emoji": "👑"
+        "gradient": "linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)"
     }
 }
 
@@ -111,17 +101,17 @@ leaders = {
 # -------------------
 st.set_page_config(
     page_title="Finance Leaders AI Chat",
-    page_icon="💕",
+    page_icon="💼",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
 # -------------------
-# 💅 Custom CSS Styling with Animations
+# 💅 Custom CSS Styling with Smooth Animations
 # -------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
@@ -129,291 +119,27 @@ st.markdown("""
     header {visibility: hidden;}
     
     * {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Inter', sans-serif;
     }
     
-    /* Animated gradient background */
+    /* Smooth animated gradient background */
     .stApp {
-        background: linear-gradient(-45deg, #FFF5F7, #FFF0F5, #FCE7F3, #FAE8FF, #FEF3C7);
+        background: linear-gradient(-45deg, #E0F2F7, #F0F4F8, #E8F5E9, #FFF3E0, #F3E5F5);
         background-size: 400% 400%;
-        animation: gradientShift 15s ease infinite;
+        animation: gradientFlow 20s ease infinite;
     }
     
-    @keyframes gradientShift {
+    @keyframes gradientFlow {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
     
-    /* Floating hearts animation */
-    @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(5deg); }
-    }
-    
-    /* Sparkle animation */
-    @keyframes sparkle {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.2); }
-    }
-    
-    /* Card pop-in animation */
-    @keyframes popIn {
-        0% {
-            opacity: 0;
-            transform: scale(0.8) translateY(30px);
-        }
-        60% {
-            transform: scale(1.05) translateY(-5px);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    }
-    
-    /* Pulse animation for buttons */
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-    
-    /* Shimmer effect */
-    @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-    }
-    
-    /* Card styling with animations */
-    .leader-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        border-radius: 30px;
-        border: 3px solid rgba(255, 182, 193, 0.3);
-        padding: 0;
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        cursor: pointer;
-        height: 100%;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(255, 105, 180, 0.15);
-        animation: popIn 0.6s ease-out;
-        position: relative;
-    }
-    
-    .leader-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-        animation: shimmer 3s infinite;
-    }
-    
-    .leader-card:hover {
-        transform: translateY(-15px) scale(1.03) rotate(-1deg);
-        border-color: rgba(255, 105, 180, 0.6);
-        box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3), 0 0 30px rgba(255, 182, 193, 0.5);
-    }
-    
-    .leader-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 24px 24px 0 0;
-        transition: transform 0.4s ease;
-    }
-    
-    .leader-card:hover .leader-image {
-        transform: scale(1.1);
-    }
-    
-    /* Chat message styling with animations */
-    .user-message {
-        background: linear-gradient(135deg, #FF6B9D 0%, #F472B6 50%, #EC4899 100%);
-        color: white;
-        padding: 18px 24px;
-        border-radius: 25px 25px 5px 25px;
-        margin: 10px 0;
-        margin-left: auto;
-        max-width: 70%;
-        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
-        animation: slideInRight 0.4s ease-out;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .user-message::before {
-        content: '✨';
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        animation: sparkle 2s infinite;
-    }
-    
-    @keyframes slideInRight {
+    /* Smooth fade in animation */
+    @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateX(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    .assistant-message {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(252, 231, 243, 0.95));
-        backdrop-filter: blur(20px);
-        color: #831843;
-        padding: 18px 24px;
-        border-radius: 25px 25px 25px 5px;
-        margin: 10px 0;
-        max-width: 70%;
-        border: 2px solid rgba(255, 182, 193, 0.4);
-        box-shadow: 0 8px 25px rgba(219, 39, 119, 0.15);
-        animation: slideInLeft 0.4s ease-out;
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    /* Title styling with animation */
-    .main-title {
-        text-align: center;
-        font-size: 5rem;
-        font-weight: 900;
-        background: linear-gradient(135deg, #FF6B9D, #F472B6, #EC4899, #DB2777);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 10px;
-        animation: float 3s ease-in-out infinite;
-        text-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
-        letter-spacing: -2px;
-    }
-    
-    .subtitle {
-        text-align: center;
-        font-size: 1.8rem;
-        color: #DB2777;
-        margin-bottom: 20px;
-        animation: fadeIn 1s ease-in;
-        font-weight: 600;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Button styling with animations */
-    .stButton>button {
-        background: linear-gradient(135deg, #FF6B9D, #F472B6, #EC4899);
-        color: white;
-        border: none;
-        border-radius: 20px;
-        padding: 14px 32px;
-        font-weight: 700;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 14px;
-    }
-    
-    .stButton>button:hover {
-        transform: scale(1.08) translateY(-3px);
-        box-shadow: 0 12px 35px rgba(255, 105, 180, 0.6);
-        animation: pulse 0.5s ease;
-    }
-    
-    .stButton>button:active {
-        transform: scale(0.98);
-    }
-    
-    /* Input styling */
-    .stTextInput>div>div>input {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(20px);
-        border: 3px solid rgba(255, 182, 193, 0.4);
-        border-radius: 20px;
-        color: #831843;
-        padding: 14px 24px;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-    
-    .stTextInput>div>div>input:focus {
-        border-color: #FF6B9D;
-        box-shadow: 0 0 25px rgba(255, 105, 180, 0.4);
-        transform: scale(1.02);
-    }
-    
-    .stTextInput>div>div>input::placeholder {
-        color: #F472B6;
-        opacity: 0.7;
-    }
-    
-    /* Expertise tags with animation */
-    .expertise-tag {
-        display: inline-block;
-        background: linear-gradient(135deg, rgba(255, 182, 193, 0.6), rgba(252, 231, 243, 0.8));
-        padding: 8px 16px;
-        border-radius: 25px;
-        font-size: 11px;
-        color: #BE185D;
-        margin: 4px;
-        border: 2px solid rgba(255, 182, 193, 0.5);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-    }
-    
-    .expertise-tag:hover {
-        transform: scale(1.1);
-        background: linear-gradient(135deg, #FF6B9D, #F472B6);
-        color: white;
-    }
-    
-    /* Header styling */
-    .chat-header {
-        background: linear-gradient(135deg, #FF6B9D, #F472B6, #EC4899);
-        padding: 28px;
-        border-radius: 25px;
-        margin-bottom: 20px;
-        box-shadow: 0 12px 40px rgba(255, 105, 180, 0.4);
-        animation: slideDown 0.5s ease-out;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .chat-header::before {
-        content: '✨';
-        position: absolute;
-        font-size: 50px;
-        opacity: 0.2;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        animation: sparkle 3s infinite;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
+            transform: translateY(30px);
         }
         to {
             opacity: 1;
@@ -421,13 +147,205 @@ st.markdown("""
         }
     }
     
-    /* Decorative elements */
-    .floating-hearts {
-        position: fixed;
-        font-size: 30px;
+    /* Card styling with smooth animations */
+    .leader-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        border: 2px solid rgba(200, 200, 200, 0.2);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .leader-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: rgba(150, 150, 150, 0.3);
+    }
+    
+    .leader-image-container {
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .leader-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .leader-card:hover .leader-image {
+        transform: scale(1.08);
+    }
+    
+    /* Gradient overlay on images */
+    .gradient-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .leader-card:hover .gradient-overlay {
         opacity: 0.3;
-        animation: float 4s ease-in-out infinite;
-        z-index: -1;
+    }
+    
+    /* Chat message animations */
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .user-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 16px 22px;
+        border-radius: 20px 20px 4px 20px;
+        margin: 12px 0;
+        margin-left: auto;
+        max-width: 70%;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        animation: slideInRight 0.4s ease-out;
+    }
+    
+    .assistant-message {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 244, 248, 0.95));
+        backdrop-filter: blur(10px);
+        color: #2C3E50;
+        padding: 16px 22px;
+        border-radius: 20px 20px 20px 4px;
+        margin: 12px 0;
+        max-width: 70%;
+        border: 2px solid rgba(200, 200, 200, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        animation: slideInLeft 0.4s ease-out;
+    }
+    
+    /* Title styling */
+    .main-title {
+        text-align: center;
+        font-size: 4.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #43e97b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        letter-spacing: -2px;
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .subtitle {
+        text-align: center;
+        font-size: 1.4rem;
+        color: #5A67D8;
+        margin-bottom: 30px;
+        font-weight: 600;
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    /* Button styling */
+    .stButton>button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        padding: 12px 28px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .stButton>button:active {
+        transform: translateY(0);
+    }
+    
+    /* Input styling */
+    .stTextInput>div>div>input {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(200, 200, 200, 0.3);
+        border-radius: 16px;
+        color: #2C3E50;
+        padding: 14px 20px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .stTextInput>div>div>input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .stTextInput>div>div>input::placeholder {
+        color: #A0AEC0;
+    }
+    
+    /* Expertise tags */
+    .expertise-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(67, 233, 123, 0.1));
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 11px;
+        color: #5A67D8;
+        margin: 4px;
+        border: 1.5px solid rgba(102, 126, 234, 0.3);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    .expertise-tag:hover {
+        transform: scale(1.05);
+        border-color: rgba(102, 126, 234, 0.6);
+    }
+    
+    /* Header styling */
+    .chat-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 28px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+        animation: fadeInUp 0.5s ease-out;
     }
     
     /* Card content padding */
@@ -438,16 +356,16 @@ st.markdown("""
     /* Typing indicator */
     .typing-indicator {
         display: flex;
-        gap: 5px;
-        padding: 15px;
+        gap: 6px;
+        padding: 12px;
     }
     
     .typing-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background: #FF6B9D;
-        animation: typingAnimation 1.4s infinite;
+        background: #667eea;
+        animation: typingPulse 1.4s infinite ease-in-out;
     }
     
     .typing-dot:nth-child(2) {
@@ -458,32 +376,22 @@ st.markdown("""
         animation-delay: 0.4s;
     }
     
-    @keyframes typingAnimation {
-        0%, 60%, 100% {
-            transform: translateY(0);
-            opacity: 0.7;
+    @keyframes typingPulse {
+        0%, 80%, 100% {
+            opacity: 0.4;
+            transform: scale(0.8);
         }
-        30% {
-            transform: translateY(-15px);
+        40% {
             opacity: 1;
+            transform: scale(1);
         }
     }
     
-    /* Sparkle decoration */
-    .sparkle-decoration {
-        display: inline-block;
-        animation: sparkle 2s infinite;
+    /* Smooth hover transitions for all interactive elements */
+    a, button, input, .leader-card, .expertise-tag {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 </style>
-""", unsafe_allow_html=True)
-
-# Add floating hearts decoration
-st.markdown("""
-    <div class="floating-hearts" style="left: 10%; top: 20%;">💕</div>
-    <div class="floating-hearts" style="right: 15%; top: 30%; animation-delay: 1s;">✨</div>
-    <div class="floating-hearts" style="left: 20%; bottom: 25%; animation-delay: 2s;">🌸</div>
-    <div class="floating-hearts" style="right: 10%; bottom: 35%; animation-delay: 1.5s;">💖</div>
-    <div class="floating-hearts" style="left: 50%; top: 15%; animation-delay: 0.5s;">🦋</div>
 """, unsafe_allow_html=True)
 
 # -------------------
@@ -491,7 +399,7 @@ st.markdown("""
 # -------------------
 if "messages" not in st.session_state:
     st.session_state.messages = {
-        name: [{"role": "system", "content": f"You are {name}, a financial expert with expertise in {leaders[name]['expertise'][0]}. You speak in a {leaders[name]['style']} style. Provide insightful, warm, and encouraging financial advice related to {leaders[name]['title']}."}]
+        name: [{"role": "system", "content": f"You are {name}, a financial expert with expertise in {leaders[name]['expertise'][0]}. You speak in a {leaders[name]['style']} style. Provide insightful financial advice related to {leaders[name]['title']}."}]
         for name in leaders
     }
 
@@ -506,12 +414,9 @@ if "typing" not in st.session_state:
 # -------------------
 if st.session_state.selected_leader is None:
     # Hero Section
-    st.markdown('<h1 class="main-title">💕 Finance Queens 💕</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle"><span class="sparkle-decoration">✨</span> Learn from Visionaries Who Changed the World <span class="sparkle-decoration">✨</span></p>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; color: #DB2777; margin-bottom: 50px; font-size: 1.2rem; font-weight: 600;">💖 Select your finance mentor and start your journey 💖</p>', unsafe_allow_html=True)
-    
-    # Add a decorative divider
-    st.markdown('<div style="width: 200px; height: 4px; background: linear-gradient(90deg, #FF6B9D, #F472B6, #EC4899); margin: 30px auto; border-radius: 10px;"></div>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-title">Finance Leaders</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Learn from Visionaries Who Changed the World</p>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; color: #718096; margin-bottom: 50px; font-size: 1.1rem; font-weight: 500;">Select a leader to explore their financial expertise</p>', unsafe_allow_html=True)
     
     # First Row - 5 Leaders
     cols1 = st.columns(5, gap="large")
@@ -526,35 +431,38 @@ if st.session_state.selected_leader is None:
                 # Card container
                 st.markdown(f'<div class="leader-card" style="animation-delay: {idx * 0.1}s;">', unsafe_allow_html=True)
                 
+                # Image container with gradient overlay
+                st.markdown('<div class="leader-image-container">', unsafe_allow_html=True)
+                
                 # Try to load image
                 try:
                     if os.path.exists(leader['image']):
-                        st.markdown('<div style="overflow: hidden; border-radius: 24px 24px 0 0;">', unsafe_allow_html=True)
                         st.image(leader['image'], use_container_width=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
                     else:
                         st.markdown(f"""
-                        <div style="height: 200px; background: linear-gradient(135deg, {leader['color']}, #FECACA); border-radius: 24px 24px 0 0; display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; overflow: hidden;">
-                            <div style="position: absolute; font-size: 120px; opacity: 0.2;">{leader['emoji']}</div>
-                            <div style="position: relative;">{leader['emoji']}</div>
+                        <div style="width: 100%; height: 220px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                            💼
                         </div>
                         """, unsafe_allow_html=True)
                 except:
                     st.markdown(f"""
-                    <div style="height: 200px; background: linear-gradient(135deg, {leader['color']}, #FECACA); border-radius: 24px 24px 0 0; display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; overflow: hidden;">
-                        <div style="position: absolute; font-size: 120px; opacity: 0.2;">{leader['emoji']}</div>
-                        <div style="position: relative;">{leader['emoji']}</div>
+                    <div style="width: 100%; height: 220px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                        💼
                     </div>
                     """, unsafe_allow_html=True)
+                
+                # Gradient overlay
+                st.markdown(f'<div class="gradient-overlay" style="background: {leader["gradient"]};"></div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
                 
                 # Card content
                 st.markdown(f"""
                 <div class="card-content">
-                    <h3 style="color: #831843; font-size: 19px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                        <span>{leader['emoji']}</span> {leader_name}
+                    <h3 style="color: #2D3748; font-size: 18px; font-weight: 700; margin-bottom: 8px;">
+                        {leader_name}
                     </h3>
-                    <p style="color: {leader['color']}; font-size: 13px; margin-bottom: 12px; font-weight: 600;">💼 {leader['title']}</p>
-                    <p style="color: #BE185D; font-size: 12px; line-height: 1.6; margin-bottom: 16px; font-weight: 500;">{leader['description'][:75]}...</p>
+                    <p style="color: #5A67D8; font-size: 13px; margin-bottom: 12px; font-weight: 600;">{leader['title']}</p>
+                    <p style="color: #4A5568; font-size: 12px; line-height: 1.6; margin-bottom: 16px; font-weight: 500;">{leader['description']}</p>
                     <div style="margin-bottom: 16px;">
                         {''.join([f'<span class="expertise-tag">{skill}</span>' for skill in leader['expertise'][:2]])}
                     </div>
@@ -563,7 +471,7 @@ if st.session_state.selected_leader is None:
                 
                 st.markdown('</div>', unsafe_allow_html=True)
                 
-                if st.button(f"✨ Chat with {leader_name.split()[0]}", key=f"btn_{idx}", use_container_width=True):
+                if st.button(f"Start Chat", key=f"btn_{idx}", use_container_width=True):
                     st.session_state.selected_leader = leader_name
                     st.rerun()
     
@@ -582,35 +490,38 @@ if st.session_state.selected_leader is None:
                 # Card container
                 st.markdown(f'<div class="leader-card" style="animation-delay: {(idx + 5) * 0.1}s;">', unsafe_allow_html=True)
                 
+                # Image container with gradient overlay
+                st.markdown('<div class="leader-image-container">', unsafe_allow_html=True)
+                
                 # Try to load image
                 try:
                     if os.path.exists(leader['image']):
-                        st.markdown('<div style="overflow: hidden; border-radius: 24px 24px 0 0;">', unsafe_allow_html=True)
                         st.image(leader['image'], use_container_width=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
                     else:
                         st.markdown(f"""
-                        <div style="height: 200px; background: linear-gradient(135deg, {leader['color']}, #FECACA); border-radius: 24px 24px 0 0; display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; overflow: hidden;">
-                            <div style="position: absolute; font-size: 120px; opacity: 0.2;">{leader['emoji']}</div>
-                            <div style="position: relative;">{leader['emoji']}</div>
+                        <div style="width: 100%; height: 220px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                            💼
                         </div>
                         """, unsafe_allow_html=True)
                 except:
                     st.markdown(f"""
-                    <div style="height: 200px; background: linear-gradient(135deg, {leader['color']}, #FECACA); border-radius: 24px 24px 0 0; display: flex; align-items: center; justify-content: center; font-size: 80px; position: relative; overflow: hidden;">
-                        <div style="position: absolute; font-size: 120px; opacity: 0.2;">{leader['emoji']}</div>
-                        <div style="position: relative;">{leader['emoji']}</div>
+                    <div style="width: 100%; height: 220px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                        💼
                     </div>
                     """, unsafe_allow_html=True)
+                
+                # Gradient overlay
+                st.markdown(f'<div class="gradient-overlay" style="background: {leader["gradient"]};"></div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
                 
                 # Card content
                 st.markdown(f"""
                 <div class="card-content">
-                    <h3 style="color: #831843; font-size: 19px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                        <span>{leader['emoji']}</span> {leader_name}
+                    <h3 style="color: #2D3748; font-size: 18px; font-weight: 700; margin-bottom: 8px;">
+                        {leader_name}
                     </h3>
-                    <p style="color: {leader['color']}; font-size: 13px; margin-bottom: 12px; font-weight: 600;">💼 {leader['title']}</p>
-                    <p style="color: #BE185D; font-size: 12px; line-height: 1.6; margin-bottom: 16px; font-weight: 500;">{leader['description'][:75]}...</p>
+                    <p style="color: #5A67D8; font-size: 13px; margin-bottom: 12px; font-weight: 600;">{leader['title']}</p>
+                    <p style="color: #4A5568; font-size: 12px; line-height: 1.6; margin-bottom: 16px; font-weight: 500;">{leader['description']}</p>
                     <div style="margin-bottom: 16px;">
                         {''.join([f'<span class="expertise-tag">{skill}</span>' for skill in leader['expertise'][:2]])}
                     </div>
@@ -619,7 +530,7 @@ if st.session_state.selected_leader is None:
                 
                 st.markdown('</div>', unsafe_allow_html=True)
                 
-                if st.button(f"✨ Chat with {leader_name.split()[0]}", key=f"btn_{actual_idx}", use_container_width=True):
+                if st.button(f"Start Chat", key=f"btn_{actual_idx}", use_container_width=True):
                     st.session_state.selected_leader = leader_name
                     st.rerun()
     
@@ -627,10 +538,8 @@ if st.session_state.selected_leader is None:
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
     <div style="text-align: center; padding: 40px;">
-        <div style="display: inline-flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 20px 40px; border-radius: 50px; border: 3px solid rgba(255, 182, 193, 0.5); box-shadow: 0 10px 40px rgba(255, 105, 180, 0.2);">
-            <span style="font-size: 24px;" class="sparkle-decoration">✨</span>
-            <span style="color: #DB2777; font-weight: 700; font-size: 1.1rem;">Powered by wisdom, grace & financial excellence</span>
-            <span style="font-size: 24px;" class="sparkle-decoration">💕</span>
+        <div style="display: inline-flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 18px 36px; border-radius: 50px; border: 2px solid rgba(200, 200, 200, 0.2); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <span style="color: #5A67D8; font-weight: 600; font-size: 1rem;">Powered by wisdom and financial excellence</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -654,14 +563,14 @@ else:
         st.markdown(f"""
         <div class="chat-header">
             <div style="display: flex; align-items: center; gap: 24px;">
-                <div style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; border: 4px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
-                    {leader['emoji']}
+                <div style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; border: 3px solid rgba(255, 255, 255, 0.4);">
+                    💼
                 </div>
                 <div>
-                    <h2 style="color: white; margin: 0; font-size: 32px; font-weight: 900; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">{leader_name}</h2>
+                    <h2 style="color: white; margin: 0; font-size: 32px; font-weight: 800;">{leader_name}</h2>
                     <p style="color: rgba(255, 255, 255, 0.95); margin: 6px 0; font-size: 17px; font-weight: 600;">{leader['title']}</p>
                     <div style="margin-top: 10px;">
-                        {''.join([f'<span style="background: rgba(255, 255, 255, 0.3); padding: 6px 14px; border-radius: 25px; font-size: 13px; color: white; margin-right: 8px; border: 2px solid rgba(255, 255, 255, 0.4); font-weight: 600; display: inline-block;">{skill}</span>' for skill in leader['expertise']])}
+                        {''.join([f'<span style="background: rgba(255, 255, 255, 0.2); padding: 6px 14px; border-radius: 20px; font-size: 13px; color: white; margin-right: 8px; border: 2px solid rgba(255, 255, 255, 0.3); font-weight: 600; display: inline-block;">{skill}</span>' for skill in leader['expertise']])}
                     </div>
                 </div>
             </div>
@@ -675,12 +584,12 @@ else:
             if msg["role"] == "user":
                 st.markdown(f'<div style="display: flex; justify-content: flex-end;"><div class="user-message">{msg["content"]}</div></div>', unsafe_allow_html=True)
             else:
-                st.markdown(f'<div class="assistant-message">💕 {msg["content"]}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="assistant-message">{msg["content"]}</div>', unsafe_allow_html=True)
         
         # Typing indicator
         if st.session_state.typing:
             st.markdown("""
-            <div class="assistant-message" style="padding: 10px 20px;">
+            <div class="assistant-message" style="padding: 8px 16px;">
                 <div class="typing-indicator">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
@@ -696,13 +605,13 @@ else:
     with col1:
         user_input = st.text_input(
             "Message",
-            placeholder=f"✨ Ask {leader_name.split()[0]} about {leader['expertise'][0].lower()}...",
+            placeholder=f"Ask {leader_name.split()[0]} about {leader['expertise'][0].lower()}...",
             key="user_input",
             label_visibility="collapsed"
         )
     
     with col2:
-        send_button = st.button("Send 💖", use_container_width=True)
+        send_button = st.button("Send", use_container_width=True)
     
     # Process Message
     if send_button and user_input:
@@ -713,7 +622,7 @@ else:
     
     # Get AI response if typing
     if st.session_state.typing:
-        with st.spinner(f"💕 {leader_name.split()[0]} is thinking..."):
+        with st.spinner(f"{leader_name.split()[0]} is thinking..."):
             try:
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -728,7 +637,7 @@ else:
                 st.session_state.typing = False
                 
             except Exception as e:
-                st.error(f"💔 Oops! Something went wrong: {str(e)}")
+                st.error(f"Error: {str(e)}")
                 st.session_state.typing = False
         
         st.rerun()
@@ -739,20 +648,18 @@ else:
 with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 20px;">
-        <div style="font-size: 60px; margin-bottom: 20px;">💕</div>
-        <h2 style="color: #DB2777; font-weight: 800;">Finance Queens</h2>
+        <div style="font-size: 60px; margin-bottom: 20px;">💼</div>
+        <h2 style="color: #5A67D8; font-weight: 800;">Finance Leaders</h2>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("---")
     
     st.markdown("""
-    <div style="background: linear-gradient(135deg, rgba(255, 182, 193, 0.3), rgba(252, 231, 243, 0.5)); 
-                padding: 20px; border-radius: 20px; border: 2px solid rgba(255, 182, 193, 0.5); margin-bottom: 20px;">
-        <h3 style="color: #BE185D; font-weight: 700; margin-bottom: 15px;">✨ About</h3>
-        <p style="color: #831843; line-height: 1.6; font-weight: 500;">
-            Connect with 10 inspiring women leaders and learn from their unique perspectives on finance, business, and leadership. 
-            Each mentor brings her own expertise to guide you! 💖
+    <div style="background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 16px; border: 2px solid rgba(200, 200, 200, 0.2); margin-bottom: 20px;">
+        <h3 style="color: #2D3748; font-weight: 700; margin-bottom: 15px;">About</h3>
+        <p style="color: #4A5568; line-height: 1.6; font-weight: 500;">
+            Connect with 10 inspiring women leaders and learn from their unique perspectives on finance, business, and leadership.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -760,26 +667,7 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown("""
-    <div style="background: linear-gradient(135deg, rgba(255, 182, 193, 0.3), rgba(252, 231, 243, 0.5)); 
-                padding: 20px; border-radius: 20px; border: 2px solid rgba(255, 182, 193, 0.5);">
-        <h3 style="color: #BE185D; font-weight: 700; margin-bottom: 15px;">🎯 Features</h3>
-        <ul style="color: #831843; line-height: 2; font-weight: 500; list-style: none; padding-left: 0;">
-            <li>💕 Personalized financial advice</li>
-            <li>✨ Expert insights from diverse fields</li>
-            <li>🦋 Real-time AI conversations</li>
-            <li>👑 Empowering guidance</li>
-            <li>💖 Supportive community</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div style="text-align: center; padding: 15px; background: rgba(255, 182, 193, 0.2); 
-                border-radius: 15px; border: 2px solid rgba(255, 182, 193, 0.4);">
-        <p style="color: #DB2777; font-weight: 700; margin: 0;">
-            ✨ Powered by OpenAI GPT-3.5 ✨
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    <div style="background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 16px; border: 2px solid rgba(200, 200, 200, 0.2);">
+        <h3 style="color: #2D3748; font-weight: 700; margin-bottom: 15px;">Features</h3>
+        <ul style="color: #4A5568; line-height: 2; font-weight: 500;">
+            <li>Personalize
