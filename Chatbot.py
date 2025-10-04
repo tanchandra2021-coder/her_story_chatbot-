@@ -244,6 +244,7 @@ st.markdown("""
         animation: imagePopUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         animation-delay: 0.2s;
         animation-fill-mode: both;
+        border-radius: 0;
     }
     
     @keyframes imagePopUp {
@@ -263,7 +264,6 @@ st.markdown("""
     .profile-image {
         width: 100%;
         height: 100%;
-        border-radius: 50%;
         object-fit: cover;
         border: 8px solid white;
         box-shadow: 
@@ -281,7 +281,6 @@ st.markdown("""
         transform: translate(-50%, -50%);
         width: 300px;
         height: 300px;
-        border-radius: 50%;
         background: radial-gradient(circle, rgba(233, 30, 99, 0.3) 0%, transparent 70%);
         animation: pulse 2s ease-in-out infinite;
         z-index: 1;
@@ -564,7 +563,7 @@ if not st.session_state.selected_leader:
         if img_base64:
             img_html = f'<img src="{img_base64}" class="profile-image" alt="{current_name}">'
         else:
-            img_html = f'''<div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
+            img_html = f'''<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
                 👩
             </div>'''
         
