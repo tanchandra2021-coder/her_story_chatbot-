@@ -729,3 +729,180 @@ with st.sidebar:
         </p>
     </div>
     """, unsafe_allow_html=True)
+    # Ensure images load properly with placeholder fallback
+def get_leader_image(leader):
+    if os.path.exists(leader['image']):
+        return leader['image']
+    else:
+        # Return a colored circle with emoji if image doesn't exist
+        return None
+
+# Function to display carousel of leaders
+def display_leader_carousel(start_idx, end_idx):
+    cols = st.columns(5, gap="large")
+    leader_names = list(leaders.keys())
+
+    for idx, col in enumerate(cols):
+        leader_idx = start_idx + idx
+        if leader_idx < len(leader_names):
+            leader_name = leader_names[leader_idx]
+            leader = leaders[leader_name]
+            with col:
+                st.markdown(f'<div class="leader-card" style="animation-delay: {idx * 0.1}s;">', unsafe_allow_html=True)
+                st.markdown(f'<div class="emoji-badge">{leader["emoji"]}</div>', unsafe_allow_html=True)
+                st.markdown('<div class="profile-image-wrapper">', unsafe_allow_html=True)
+                
+                img_path = get_leader_image(leader)
+                if img_path:
+                    st.image(img_path, width=200)
+                else:
+                    st.markdown(f"""
+                    <div style="width: 200px; height: 200px; background: {leader['gradient']}; 
+                        border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                        font-size: 80px; border: 5px solid white; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                        {leader['emoji']}
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown(f"""
+                <div class="card-content">
+                    <h3>{leader_name}</h3>
+                    <p class="title">{leader['title']}</p>
+                    <p class="description">{leader['description']}</p>
+                    <div style="margin-bottom: 20px;">
+                        {''.join([f'<span class="expertise-tag">{skill}</span>' for skill in leader['expertise'][:2]])}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+
+                if st.button("Start Chat", key=f"btn_{leader_idx}", use_container_width=True):
+                    st.session_state.selected_leader = leader_name
+                    st.rerun()
+
+# Carousel dots
+def display_carousel_dots():
+    st.markdown("""
+    <div class="carousel-nav">
+        <div class="carousel-dot {}"></div>
+        <div class="carousel-dot {}"></div>
+    </div>
+    """.format("active" if st.session_state.carousel_page == 0 else "", 
+               "active" if st.session_state.carousel_page == 1 else ""), 
+    unsafe_allow_html=True)
+
+# Leader Selection Page
+if st.session_state.selected_leader is None:
+    st.markdown('<h1 class="main-title">FINANCE LEADERS</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Visionaries Who Changed the World</p>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="greeting-box">
+        <p style="color: #2D3748; font-size: 1.3rem; font-weight: 700; margin: 0; font-family: 'Rajdhani', sans-serif; letter-spacing: 2px;">
+            👋 Hello, ready to chat with these inspiring leaders?
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Topic selection
+    st.markdown('<h2 class="section-title">RECOMMENDED FOR YOU</h2>', unsafe_allow_html=True)
+    topic_cols = st.columns(5)
+    topics = ["Finance Careers", "Personal Finance", "Startups", "Social Impact", "Tech Finance"]
+    for idx, topic in enumerate(topics):
+        with topic_cols[idx]:
+            if st.button(topic, key=f"topic_{idx}", use_container_width=True):
+                st.session_state.selected_topic = topic
+                st.rerun()
+
+    st.markdown('<h2 class="section-title">ALL LEADERS</h2>', unsafe_allow_html=True)
+
+    nav_col1, nav_col2, nav_col3 = st.columns([1, 2, 1])
+    with nav_col1:
+        if st.button("← Previous", key="prev"):
+            if st.session_state.carousel_page > 0:
+                st.session_state.carousel_page -= 1
+                st.rerun()
+    with nav_col3:
+        if st.button("Next →", key="next"):
+            if st.session_state.carousel_page < 1:
+                st.session_state.carousel_page += 1
+                st.rerun()
+
+    start_idx = st.session_state.carousel_page * 5
+    end_idx = start_idx + 5
+    display_leader_carousel(start_idx, end_idx)
+    display_carousel_dots()
+
+# Chat Page
+else:
+    leader_name = st.session_state.selected_leader
+    leader = leaders[leader_name]
+    
+    col1, col2 = st.columns([1, 8])
+    with col1:
+        if st.button("← Back", key="back_button"):
+            st.session_state.selected_leader = None
+            st.session_state.selected_topic = None
+            st.rerun()
+
+    with col2:
+        st.markdown(f"""
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <div style="width: 90px; height: 90px; background: {leader['gradient']}; border-radius: 25px; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 3px solid rgba(102, 126, 234, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: float 3s ease-in-out infinite;">
+                    {leader['emoji']}
+                </div>
+                <div>
+                    <h2 style="color: #2D3748; margin: 0; font-size: 38px; font-weight: 900; font-family: 'Orbitron', sans-serif;">{leader_name}</h2>
+                    <p style="color: #667eea; margin: 10px 0; font-size: 18px; font-weight: 700;">{leader['title']}</p>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Chat messages
+    chat_container = st.container()
+    with chat_container:
+        for msg in st.session_state.messages[leader_name][1:]:
+            if msg["role"] == "user":
+                st.markdown(f'<div style="display: flex; justify-content: flex-end;"><div class="user-message">{msg["content"]}</div></div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="assistant-message">{msg["content"]}</div>', unsafe_allow_html=True)
+        if st.session_state.typing:
+            st.markdown('<div class="assistant-message"><p style="margin: 0;">Thinking...</p></div>', unsafe_allow_html=True)
+
+    # Chat input
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2 = st.columns([6, 1])
+    with col1:
+        user_input = st.text_input(
+            "Message",
+            placeholder=f"Ask {leader_name.split()[0]} about {leader['expertise'][0].lower()}...",
+            key="user_input",
+            label_visibility="collapsed"
+        )
+    with col2:
+        send_button = st.button("Send", use_container_width=True)
+
+    if send_button and user_input:
+        st.session_state.messages[leader_name].append({"role": "user", "content": user_input})
+        st.session_state.typing = True
+        st.rerun()
+
+    if st.session_state.typing:
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=st.session_state.messages[leader_name],
+                temperature=0.7,
+                max_tokens=400
+            )
+            reply = response.choices[0].message.content
+            st.session_state.messages[leader_name].append({"role": "assistant", "content": reply})
+            st.session_state.typing = False
+            st.rerun()
+        except Exception as e:
+            st.error(f"Error: {str(e)}")
+            st.session_state.typing = False
+
