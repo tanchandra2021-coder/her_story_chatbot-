@@ -481,15 +481,6 @@ st.markdown("""
         transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     
-    /* Decorative elements */
-    .decorative-circle {
-        position: fixed;
-        border-radius: 50%;
-        opacity: 0.1;
-        pointer-events: none;
-        animation: float 6s ease-in-out infinite;
-    }
-    
     /* Card number badge */
     .card-number {
         position: absolute;
@@ -669,4 +660,154 @@ if st.session_state.selected_leader is None:
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
     <div style="text-align: center; padding: 50px;">
-        <div style="display: inline-flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.98
+        <div style="display: inline-flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); padding: 24px 48px; border-radius: 50px; border: 2px solid rgba(201, 160, 220, 0.2); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+            <span style="font-size: 32px;">✨</span>
+            <span style="color: #7B68A8; font-weight: 700; font-size: 1.1rem;">Powered by wisdom and financial excellence</span>
+            <span style="font-size: 32px;">💼</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# -------------------
+# 💬 Chat Page
+# -------------------
+else:
+    leader_name = st.session_state.selected_leader
+    leader = leaders[leader_name]
+    
+    # Chat Header
+    col1, col2 = st.columns([1, 8])
+    
+    with col1:
+        if st.button("← Back", key="back_button"):
+            st.session_state.selected_leader = None
+            st.rerun()
+    
+    with col2:
+        st.markdown(f"""
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 28px;">
+                <div style="width: 90px; height: 90px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 3px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);">
+                    {leader['emoji']}
+                </div>
+                <div>
+                    <h2 style="color: white; margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -1px;">{leader_name}</h2>
+                    <p style="color: rgba(255, 255, 255, 0.95); margin: 8px 0; font-size: 18px; font-weight: 700;">{leader['title']}</p>
+                    <div style="margin-top: 12px;">
+                        {''.join([f'<span style="background: rgba(255, 255, 255, 0.25); padding: 8px 18px; border-radius: 24px; font-size: 13px; color: white; margin-right: 10px; border: 2px solid rgba(255, 255, 255, 0.4); font-weight: 700; display: inline-block;">{skill}</span>' for skill in leader['expertise']])}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Display Chat Messages
+    chat_container = st.container()
+    with chat_container:
+        for msg in st.session_state.messages[leader_name][1:]:  # Skip system message
+            if msg["role"] == "user":
+                st.markdown(f'<div style="display: flex; justify-content: flex-end;"><div class="user-message">{msg["content"]}</div></div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="assistant-message">{msg["content"]}</div>', unsafe_allow_html=True)
+        
+        # Typing indicator
+        if st.session_state.typing:
+            st.markdown("""
+            <div class="assistant-message" style="padding: 10px 20px;">
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Chat Input
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2 = st.columns([5, 1])
+    
+    with col1:
+        user_input = st.text_input(
+            "Message",
+            placeholder=f"Ask {leader_name.split()[0]} about {leader['expertise'][0].lower()}...",
+            key="user_input",
+            label_visibility="collapsed"
+        )
+    
+    with col2:
+        send_button = st.button("Send", use_container_width=True)
+    
+    # Process Message
+    if send_button and user_input:
+        # Add user message
+        st.session_state.messages[leader_name].append({"role": "user", "content": user_input})
+        st.session_state.typing = True
+        st.rerun()
+    
+    # Get AI response if typing
+    if st.session_state.typing:
+        with st.spinner(f"{leader_name.split()[0]} is thinking..."):
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=st.session_state.messages[leader_name],
+                    temperature=0.7,
+                    max_tokens=400
+                )
+                reply = response.choices[0].message.content
+                
+                # Add assistant message
+                st.session_state.messages[leader_name].append({"role": "assistant", "content": reply})
+                st.session_state.typing = False
+                
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+                st.session_state.typing = False
+        
+        st.rerun()
+
+# -------------------
+# 📊 Sidebar Info
+# -------------------
+with st.sidebar:
+    st.markdown("""
+    <div style="text-align: center; padding: 24px;">
+        <div style="font-size: 72px; margin-bottom: 24px; animation: float 3s ease-in-out infinite;">💼</div>
+        <h2 style="color: #7B68A8; font-weight: 900; font-size: 28px; letter-spacing: -1px;">Finance Leaders</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    st.markdown("""
+    <div style="background: rgba(255, 255, 255, 0.95); padding: 24px; border-radius: 20px; border: 2px solid rgba(201, 160, 220, 0.2); margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h3 style="color: #2D3748; font-weight: 800; margin-bottom: 16px; font-size: 20px;">About</h3>
+        <p style="color: #4A5568; line-height: 1.8; font-weight: 500; font-size: 14px;">
+            Connect with 10 inspiring women leaders and learn from their unique perspectives on finance, business, and leadership.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    st.markdown("""
+    <div style="background: rgba(255, 255, 255, 0.95); padding: 24px; border-radius: 20px; border: 2px solid rgba(201, 160, 220, 0.2); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h3 style="color: #2D3748; font-weight: 800; margin-bottom: 16px; font-size: 20px;">Features</h3>
+        <ul style="color: #4A5568; line-height: 2.2; font-weight: 500; font-size: 14px; padding-left: 20px;">
+            <li>Personalized financial advice</li>
+            <li>Expert insights from diverse fields</li>
+            <li>Real-time AI conversations</li>
+            <li>Empowering guidance</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #C9A0DC 0%, #B8E8FC 100%); border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.4); box-shadow: 0 6px 24px rgba(201, 160, 220, 0.3);">
+        <p style="color: white; font-weight: 800; margin: 0; font-size: 15px;">
+            Powered by OpenAI GPT-3.5
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
