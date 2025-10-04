@@ -261,17 +261,21 @@ st.markdown("""
         }
     }
     
-    .profile-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border: 8px solid white;
-        box-shadow: 
-            0 25px 60px rgba(0, 0, 0, 0.25),
-            0 0 0 15px rgba(233, 30, 99, 0.2),
-            inset 0 0 50px rgba(233, 30, 99, 0.05);
-        position: relative;
-        z-index: 2;
+    div[data-testid="stImage"] {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    div[data-testid="stImage"] > img {
+        border: 8px solid white !important;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2) !important;
+        animation: imagePopUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        max-width: 280px !important;
+        max-height: 280px !important;
+        width: 280px !important;
+        height: 280px !important;
+        object-fit: cover !important;
     }
     
     .profile-glow {
@@ -556,42 +560,56 @@ if not st.session_state.selected_leader:
         leader = leaders[current_name]
         first_name = current_name.split()[0]
         
-        # Get image as base64
-        img_base64 = get_image_base64(leader['image'])
+        # Start card
+        st.markdown('<div class="leader-card">', unsafe_allow_html=True)
         
-        # Create the entire card in HTML for smooth animations
-        if img_base64:
-            img_html = f'<img src="{img_base64}" class="profile-image" alt="{current_name}">'
-        else:
-            img_html = f'''<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
-                👩
-            </div>'''
-        
-        expertise_tags = ''.join([f'<span class="expertise-tag">{exp}</span>' for exp in leader['expertise']])
-        
-        card_html = f'''
-        <div class="leader-card">
+        # Curved text
+        st.markdown(f'''
             <div class="curved-text-container">
                 <p class="curved-text">Hi, I'm {first_name}. Let's Chat!</p>
             </div>
-            
-            <div class="profile-circle-container">
-                <div class="profile-glow"></div>
-                {img_html}
-            </div>
-            
-            <h2 class="leader-name-text">{current_name}</h2>
-            <p class="leader-title-text">{leader['title']} {leader['emoji']}</p>
-            <p class="leader-specialty-text">{leader['specialty']}</p>
-            
-            <div class="expertise-tags-container">
-                {expertise_tags}
-            </div>
-        </div>
-        '''
+        ''', unsafe_allow_html=True)
         
-        st.markdown(card_html, unsafe_allow_html=True)
+        # Profile image container - opening tags
+        st.markdown('<div class="profile-circle-container"><div class="profile-glow"></div>', unsafe_allow_html=True)
         
+        # Try to load and display the image
+        try:
+            if os.path.exists(leader['image']):
+                img = Image.open(leader['image'])
+                # Create a container with custom styling
+                st.markdown('<div style="display: flex; justify-content: center;">', unsafe_allow_html=True)
+                st.image(img, use_container_width=False, width=280)
+                st.markdown('</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'''
+                    <div style="width: 280px; height: 280px; margin: 0 auto; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
+                        👩
+                    </div>
+                ''', unsafe_allow_html=True)
+        except Exception as e:
+            st.markdown(f'''
+                <div style="width: 280px; height: 280px; margin: 0 auto; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
+                    👩
+                </div>
+            ''', unsafe_allow_html=True)
+        
+        # Close profile container
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Leader info
+        st.markdown(f'<h2 class="leader-name-text">{current_name}</h2>', unsafe_allow_html=True)
+        st.markdown(f'<p class="leader-title-text">{leader["title"]} {leader["emoji"]}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="leader-specialty-text">{leader["specialty"]}</p>', unsafe_allow_html=True)
+        
+        # Expertise tags
+        expertise_tags = ''.join([f'<span class="expertise-tag">{exp}</span>' for exp in leader['expertise']])
+        st.markdown(f'<div class="expertise-tags-container">{expertise_tags}</div>', unsafe_allow_html=True)
+        
+        # Close card
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Start button
         st.markdown('<div class="start-button-container">', unsafe_allow_html=True)
         if st.button("Start Chatting", key="start_chat", use_container_width=True):
             st.session_state.selected_leader = current_name
