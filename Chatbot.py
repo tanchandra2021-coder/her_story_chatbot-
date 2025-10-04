@@ -728,7 +728,7 @@ if st.session_state.selected_leader is None:
     
     for idx, topic in enumerate(topics):
         with topic_cols[idx]:
-            if st.button(topic, key=f"topic_{idx}", use_container_width=True):
+            if st.button(topic, key=f"topic_{idx}", width='stretch'):
                 st.session_state.selected_topic = topic
                 st.rerun()
     
@@ -806,7 +806,7 @@ if st.session_state.selected_leader is None:
                 # Try to load image
                 try:
                     if os.path.exists(leader['image']):
-                        st.image(leader['image'], use_container_width=True)
+                        st.image(leader['image'], width='stretch')
                     else:
                         st.markdown(f"""
                         <div style="width: 100%; height: 240px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 90px;">
@@ -836,7 +836,7 @@ if st.session_state.selected_leader is None:
                 
                 st.markdown('</div>', unsafe_allow_html=True)
                 
-                if st.button("Start Chat", key=f"btn_{idx}", use_container_width=True):
+                if st.button("Start Chat", key=f"btn_{idx}", width='stretch'):
                     st.session_state.selected_leader = leader_name
                     st.rerun()
                 
@@ -873,7 +873,7 @@ if st.session_state.selected_leader is None:
                 
                 try:
                     if os.path.exists(leader['image']):
-                        st.image(leader['image'], use_container_width=True)
+                        st.image(leader['image'], width='stretch')
                     else:
                         st.markdown(f"""
                         <div style="width: 100%; height: 240px; background: {leader['gradient']}; display: flex; align-items: center; justify-content: center; font-size: 90px;">
@@ -902,7 +902,7 @@ if st.session_state.selected_leader is None:
                 
                 st.markdown('</div>', unsafe_allow_html=True)
                 
-                if st.button("Start Chat", key=f"btn_{actual_idx}", use_container_width=True):
+                if st.button("Start Chat", key=f"btn_{actual_idx}", width='stretch'):
                     st.session_state.selected_leader = leader_name
                     st.rerun()
                 
@@ -1011,7 +1011,7 @@ else:
         )
     
     with col2:
-        send_button = st.button("Send", use_container_width=True)
+        send_button = st.button("Send", width='stretch')
     
     # Process Message
     if send_button and user_input:
