@@ -7,7 +7,11 @@ from io import BytesIO
 
 # WARNING: Use environment variables for API key in production!
 # OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_API_KEY = "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"
+if not OPENAI_API_KEY:
+    # Fallback/security message if key is missing during local development
+    st.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+    st.stop()
+    
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 leaders = {
