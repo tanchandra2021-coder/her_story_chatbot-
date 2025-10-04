@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 from openai import OpenAI
+import os
 
 # -------------------
 # 🔑 OpenAI API Key
@@ -17,70 +18,80 @@ leaders = {
         "description": "Learn about financial literacy through education reform and community investment strategies",
         "style": "inspiring and empowering",
         "expertise": ["Impact Investing", "Education Finance", "Nonprofit Strategy"],
-        "image": "michelle_obama.png"
+        "image": "michelle_obama.png",
+        "gradient": "from-rose-400 via-pink-500 to-purple-500"
     },
     "Angela Merkel": {
         "title": "Economic Policy Expert",
         "description": "Analytical approach to fiscal policy, European economics, and strategic financial planning",
         "style": "analytical and methodical",
         "expertise": ["Fiscal Policy", "European Markets", "Economic Strategy"],
-        "image": "Angela_Merkel.png"
+        "image": "Angela_Merkel.png",
+        "gradient": "from-blue-400 via-indigo-500 to-purple-500"
     },
     "Malala Yousafzai": {
         "title": "Social Finance Advocate",
         "description": "Passionate insights on funding education, microfinance, and investing in social change",
         "style": "passionate and principled",
         "expertise": ["Microfinance", "Social Bonds", "Education Funding"],
-        "image": "Malala_Yousafazi.png"
+        "image": "Malala_Yousafazi.png",
+        "gradient": "from-purple-400 via-fuchsia-500 to-pink-500"
     },
     "Ruth Bader Ginsburg": {
         "title": "Financial Law & Ethics",
         "description": "Precise guidance on financial regulations, investment law, and ethical wealth management",
         "style": "precise and principled",
         "expertise": ["Financial Law", "Securities", "Compliance"],
-        "image": "Ruth_Bader_Ginsburg.png"
+        "image": "Ruth_Bader_Ginsburg.png",
+        "gradient": "from-amber-400 via-orange-500 to-red-500"
     },
     "Indra Nooyi": {
         "title": "Corporate Finance Leader",
         "description": "Strategic insights on corporate finance, M&A, sustainable business growth, and CFO excellence",
         "style": "strategic and visionary",
         "expertise": ["Corporate Finance", "M&A", "Business Strategy"],
-        "image": "Indra_Nooyi.png"
+        "image": "Indra_Nooyi.png",
+        "gradient": "from-emerald-400 via-teal-500 to-cyan-500"
     },
     "Sheryl Sandberg": {
         "title": "Tech Finance Executive",
         "description": "Data-driven approach to tech valuations, scaling startups, and financial operations",
         "style": "analytical and motivational",
         "expertise": ["Tech Finance", "Scaling", "Operations"],
-        "image": "Sheryl_Sandberg.png"
+        "image": "Sheryl_Sandberg.png",
+        "gradient": "from-cyan-400 via-blue-500 to-indigo-500"
     },
     "Jacinda Ardern": {
         "title": "Wellbeing Economics",
         "description": "Compassionate approach to budget management, public finance, and wellbeing economics",
         "style": "empathetic and pragmatic",
         "expertise": ["Public Finance", "Budget Policy", "Wellbeing Economy"],
-        "image": "Jacinda_Ardern.png"
+        "image": "Jacinda_Ardern.png",
+        "gradient": "from-red-400 via-pink-500 to-rose-500"
     },
     "Mae Jemison": {
         "title": "STEM Finance Pioneer",
         "description": "Innovative thinking on R&D funding, STEM investment, and technology venture capital",
         "style": "innovative and scientific",
         "expertise": ["Venture Capital", "R&D Finance", "Tech Investment"],
-        "image": "Mae_Jemison.png"
+        "image": "Mae_Jemison.png",
+        "gradient": "from-violet-400 via-purple-500 to-indigo-500"
     },
     "Reshma Saujani": {
         "title": "Startup Finance Advocate",
         "description": "Bold approach to fundraising, startup equity, and building financial resilience in tech",
         "style": "bold and resourceful",
         "expertise": ["Fundraising", "Startup Equity", "Angel Investing"],
-        "image": "Reshman_Saujani.png"
+        "image": "Reshman_Saujani.png",
+        "gradient": "from-fuchsia-400 via-pink-500 to-purple-500"
     },
     "Sara Blakely": {
         "title": "Bootstrap Finance Expert",
         "description": "Self-made approach to bootstrapping businesses, cash flow management, and building wealth",
         "style": "creative and determined",
         "expertise": ["Bootstrapping", "Cash Flow", "Wealth Building"],
-        "image": "Sara_Blakely.png"
+        "image": "Sara_Blakely.png",
+        "gradient": "from-rose-400 via-red-500 to-orange-500"
     }
 }
 
@@ -119,12 +130,22 @@ st.markdown("""
         transition: all 0.3s ease;
         cursor: pointer;
         height: 100%;
+        overflow: hidden;
     }
     
     .leader-card:hover {
         transform: translateY(-8px) scale(1.02);
         border-color: rgba(255, 255, 255, 0.3);
         box-shadow: 0 20px 60px rgba(168, 85, 247, 0.4);
+    }
+    
+    .leader-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 16px;
+        margin-bottom: 16px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
     }
     
     /* Chat message styling */
@@ -220,6 +241,15 @@ st.markdown("""
         margin-bottom: 20px;
         box-shadow: 0 8px 32px rgba(168, 85, 247, 0.4);
     }
+    
+    /* Leader header image in chat */
+    .chat-leader-image {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -245,7 +275,7 @@ if st.session_state.selected_leader is None:
     st.markdown('<p style="text-align: center; color: #c084fc; margin-bottom: 50px;">Select a leader to explore their financial expertise</p>', unsafe_allow_html=True)
     
     # First Row - 5 Leaders
-    cols1 = st.columns(5)
+    cols1 = st.columns(5, gap="medium")
     leader_names = list(leaders.keys())
     
     for idx, col in enumerate(cols1):
@@ -254,13 +284,29 @@ if st.session_state.selected_leader is None:
             leader = leaders[leader_name]
             
             with col:
-                st.markdown(f"""
-                <div class="leader-card">
+                # Try to load image, fall back to emoji if not found
+                try:
+                    if os.path.exists(leader['image']):
+                        st.image(leader['image'], use_container_width=True)
+                    else:
+                        st.markdown(f"""
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #a855f7, #ec4899); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px; border: 3px solid rgba(255, 255, 255, 0.2);">
+                                💼
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                except:
+                    st.markdown(f"""
                     <div style="text-align: center; margin-bottom: 16px;">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #a855f7, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                        <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #a855f7, #ec4899); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px; border: 3px solid rgba(255, 255, 255, 0.2);">
                             💼
                         </div>
                     </div>
+                    """, unsafe_allow_html=True)
+                
+                st.markdown(f"""
+                <div class="leader-card" style="padding-top: 0;">
                     <h3 style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">{leader_name}</h3>
                     <p style="color: #c084fc; font-size: 13px; margin-bottom: 12px;">📊 {leader['title']}</p>
                     <p style="color: #e9d5ff; font-size: 12px; line-height: 1.5; margin-bottom: 16px;">{leader['description'][:80]}...</p>
@@ -277,7 +323,7 @@ if st.session_state.selected_leader is None:
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Second Row - 5 Leaders
-    cols2 = st.columns(5)
+    cols2 = st.columns(5, gap="medium")
     
     for idx, col in enumerate(cols2):
         actual_idx = idx + 5
@@ -286,13 +332,29 @@ if st.session_state.selected_leader is None:
             leader = leaders[leader_name]
             
             with col:
-                st.markdown(f"""
-                <div class="leader-card">
+                # Try to load image, fall back to emoji if not found
+                try:
+                    if os.path.exists(leader['image']):
+                        st.image(leader['image'], use_container_width=True)
+                    else:
+                        st.markdown(f"""
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #10b981, #06b6d4); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px; border: 3px solid rgba(255, 255, 255, 0.2);">
+                                💼
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                except:
+                    st.markdown(f"""
                     <div style="text-align: center; margin-bottom: 16px;">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #10b981, #06b6d4); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                        <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #10b981, #06b6d4); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px; border: 3px solid rgba(255, 255, 255, 0.2);">
                             💼
                         </div>
                     </div>
+                    """, unsafe_allow_html=True)
+                
+                st.markdown(f"""
+                <div class="leader-card" style="padding-top: 0;">
                     <h3 style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">{leader_name}</h3>
                     <p style="color: #c084fc; font-size: 13px; margin-bottom: 12px;">📊 {leader['title']}</p>
                     <p style="color: #e9d5ff; font-size: 12px; line-height: 1.5; margin-bottom: 16px;">{leader['description'][:80]}...</p>
@@ -334,22 +396,46 @@ else:
             st.rerun()
     
     with col2:
-        st.markdown(f"""
-        <div class="chat-header">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid rgba(255, 255, 255, 0.4);">
-                    💼
+        # Try to show leader image in header
+        try:
+            if os.path.exists(leader['image']):
+                image_html = f'<img src="data:image/png;base64,{st.image(leader["image"], width=70)}" class="chat-leader-image" style="display: none;">'
+                # Use file path directly
+                st.markdown(f"""
+                <div class="chat-header">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid rgba(255, 255, 255, 0.4); overflow: hidden;">
+                            💼
+                        </div>
+                        <div>
+                            <h2 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">{leader_name}</h2>
+                            <p style="color: rgba(255, 255, 255, 0.9); margin: 4px 0; font-size: 16px; font-weight: 500;">{leader['title']}</p>
+                            <div style="margin-top: 8px;">
+                                {''.join([f'<span style="background: rgba(255, 255, 255, 0.25); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: white; margin-right: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">{skill}</span>' for skill in leader['expertise']])}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h2 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">{leader_name}</h2>
-                    <p style="color: rgba(255, 255, 255, 0.9); margin: 4px 0; font-size: 16px; font-weight: 500;">{leader['title']}</p>
-                    <div style="margin-top: 8px;">
-                        {''.join([f'<span style="background: rgba(255, 255, 255, 0.25); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: white; margin-right: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">{skill}</span>' for skill in leader['expertise']])}
+                """, unsafe_allow_html=True)
+            else:
+                raise FileNotFoundError
+        except:
+            st.markdown(f"""
+            <div class="chat-header">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid rgba(255, 255, 255, 0.4);">
+                        💼
+                    </div>
+                    <div>
+                        <h2 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">{leader_name}</h2>
+                        <p style="color: rgba(255, 255, 255, 0.9); margin: 4px 0; font-size: 16px; font-weight: 500;">{leader['title']}</p>
+                        <div style="margin-top: 8px;">
+                            {''.join([f'<span style="background: rgba(255, 255, 255, 0.25); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: white; margin-right: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">{skill}</span>' for skill in leader['expertise']])}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     
     # Display Chat Messages
     chat_container = st.container()
