@@ -5,13 +5,17 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-# WARNING: Use environment variables for API key in production!
-# OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+# 2. Check if the environment variable was actually loaded.
 if not OPENAI_API_KEY:
-    # Fallback/security message if key is missing during local development
-    st.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+    # If the key is missing (e.g., during local testing or Vercel config error),
+    # display an error and stop the app.
+    st.error("🚨 Error: OpenAI API key (OPENAI_API_KEY) not found in environment variables.")
+    st.info("Please set the environment variable in your local terminal or on the Vercel dashboard.")
     st.stop()
     
+# 3. Initialize the OpenAI client with the securely loaded key.
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 leaders = {
