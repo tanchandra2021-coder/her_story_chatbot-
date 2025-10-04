@@ -645,6 +645,9 @@ else:
 # -------------------
 # 📊 Sidebar Info
 # -------------------
+# -------------------
+# 📊 Sidebar Info
+# -------------------
 with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 20px;">
@@ -670,4 +673,20 @@ with st.sidebar:
     <div style="background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 16px; border: 2px solid rgba(200, 200, 200, 0.2);">
         <h3 style="color: #2D3748; font-weight: 700; margin-bottom: 15px;">Features</h3>
         <ul style="color: #4A5568; line-height: 2; font-weight: 500;">
-            <li>Personalize
+            <li>Personalized financial advice</li>
+            <li>Expert insights from diverse fields</li>
+            <li>Real-time AI conversations</li>
+            <li>Empowering guidance</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style="text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.8); border-radius: 15px; border: 2px solid rgba(200, 200, 200, 0.2);">
+        <p style="color: #5A67D8; font-weight: 700; margin: 0;">
+            Powered by OpenAI GPT-3.5
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
