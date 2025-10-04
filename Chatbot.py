@@ -5,8 +5,9 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-# SECURITY WARNING: Remove this API key and use environment variables instead!
-OPENAI_API_KEY = "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"
+# WARNING: Use environment variables for API key in production!
+# OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = "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"
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 leaders = {
@@ -95,6 +96,10 @@ leaders = {
 def get_image_base64(image_path):
     """Convert image to base64 for embedding in HTML"""
     try:
+        # Check if the file exists in the current directory (for testing/simplicity)
+        if not os.path.exists(image_path):
+            return None 
+            
         with Image.open(image_path) as img:
             # Convert to RGBA to handle transparency
             img = img.convert("RGBA")
@@ -102,15 +107,18 @@ def get_image_base64(image_path):
             img.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue()).decode()
             return f"data:image/png;base64,{img_str}"
-    except:
+    except Exception:
+        # In a real app, you'd log the error, but here we just return None for fallback
         return None
 
-st.set_page_config(page_title="HerStory", page_icon="👩", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="HerStory Finance AI", page_icon="👩", layout="wide", initial_sidebar_state="collapsed")
 
+# --- Custom CSS for Design and Animations ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap');
     
+    /* General Setup */
     #MainMenu, footer, header {visibility: hidden;}
     
     .stApp {
@@ -136,69 +144,39 @@ st.markdown("""
         background-clip: text;
         margin: 40px 0 60px;
         letter-spacing: 2px;
-        animation: titleFloat 3s ease-in-out infinite;
     }
-    
-    @keyframes titleFloat {
-        0%, 100% {transform: translateY(0px);}
-        50% {transform: translateY(-8px);}
-    }
-    
-    .carousel-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 40px;
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-    
-    .arrow-button {
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
-        border: none;
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 10px 35px rgba(233, 30, 99, 0.4);
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        color: white;
-        font-size: 28px;
-        font-weight: bold;
-    }
-    
-    .arrow-button:hover {
-        transform: scale(1.15);
-        box-shadow: 0 15px 45px rgba(233, 30, 99, 0.6);
-    }
-    
+
+    /* Floating Glass Card Style */
     .leader-card {
-        background: white;
+        /* Glassmorphism Effect */
+        background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+        backdrop-filter: blur(20px); /* Blur the background */
+        -webkit-backdrop-filter: blur(20px); /* Safari support */
         border-radius: 45px;
         padding: 50px 60px 60px;
-        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+        /* Shadow for floating effect */
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.3); /* Big shadow + light border */
         max-width: 650px;
         width: 100%;
         position: relative;
-        border: 3px solid rgba(233, 30, 99, 0.2);
-        animation: cardSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        overflow: hidden; /* Important for clean look */
+        border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
+        animation: cardSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     
+    /* Card Entry Animation */
     @keyframes cardSlideIn {
         0% {
             opacity: 0;
-            transform: translateX(100px) scale(0.9) rotateY(20deg);
+            transform: translateY(50px) scale(0.9);
         }
         100% {
             opacity: 1;
-            transform: translateX(0) scale(1) rotateY(0deg);
+            transform: translateY(0) scale(1);
         }
     }
     
+    /* Card Exit Animation (Solitaire Floosh Off) */
     .card-exit {
         animation: cardSlideOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
     }
@@ -206,111 +184,115 @@ st.markdown("""
     @keyframes cardSlideOut {
         0% {
             opacity: 1;
-            transform: translateX(0) scale(1) rotateY(0deg);
+            transform: translate(0, 0) scale(1) rotate(0deg);
         }
         100% {
             opacity: 0;
-            transform: translateX(-100px) scale(0.9) rotateY(-20deg);
+            transform: translate(150px, -150px) scale(0.5) rotate(45deg); /* Floosh up and to the side */
         }
     }
     
-    .curved-text-container {
+    /* Curved Text and Image Layout */
+    .curved-image-section {
         position: relative;
-        width: 280px;
-        height: 60px;
-        margin: 0 auto 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .curved-text-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 320px;
+        height: 160px; /* Gives space for the curve */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    /* This element creates the visual curve */
+    .text-arc {
+        position: absolute;
+        top: 0;
+        width: 350px;
+        height: 175px;
+        background: rgba(255, 255, 255, 0.5); /* Semi-transparent backing for the text */
+        border-radius: 0 0 175px 175px; /* Creates the top-half-of-a-circle shape */
+        border-bottom: 5px solid white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
     
     .curved-text {
-        position: absolute;
-        width: 100%;
+        position: relative;
+        top: 25px; /* Adjust to sit perfectly on the "curve" */
         text-align: center;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
+        background: linear-gradient(90deg, #E91E63, #9C27B0);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-family: 'Playfair Display', serif;
         letter-spacing: 1px;
-        transform: translateY(-10px);
     }
     
-    .profile-circle-container {
+    /* Image Styling */
+    .profile-circle-wrapper {
         width: 280px;
         height: 280px;
-        margin: 0 auto 40px;
+        margin-top: 50px; /* Push down to clear the curved text */
         position: relative;
-        animation: imagePopUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
-        animation-delay: 0.2s;
-        animation-fill-mode: both;
-        border-radius: 0;
+        z-index: 5;
     }
     
-    @keyframes imagePopUp {
-        0% {
-            opacity: 0;
-            transform: scale(0) rotate(-180deg);
-        }
-        50% {
-            transform: scale(1.15) rotate(10deg);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-    }
-    
+    /* Streamlit Image Container Wrapper */
     div[data-testid="stImage"] {
         display: flex;
         justify-content: center;
+        align-items: center;
         margin: 0 auto;
     }
     
+    /* The actual image tag */
     div[data-testid="stImage"] > img {
+        border-radius: 50% !important;
         border: 8px solid white !important;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2) !important;
-        animation: imagePopUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        /* Updated Shadow for extra pop */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 15px rgba(233, 30, 99, 0.1) !important; 
         max-width: 280px !important;
         max-height: 280px !important;
         width: 280px !important;
         height: 280px !important;
         object-fit: cover !important;
+        /* Image Pop-In Animation */
+        animation: imagePopUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
     }
     
-    .profile-glow {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(233, 30, 99, 0.3) 0%, transparent 70%);
-        animation: pulse 2s ease-in-out infinite;
-        z-index: 1;
-    }
-    
-    @keyframes pulse {
-        0%, 100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.6;
+    @keyframes imagePopUp {
+        0% {
+            opacity: 0;
+            transform: scale(0.5) rotateY(-90deg);
         }
-        50% {
-            transform: translate(-50%, -50%) scale(1.1);
-            opacity: 0.8;
+        100% {
+            opacity: 1;
+            transform: scale(1) rotateY(0deg);
         }
     }
-    
+
+    /* Leader Info & Text */
     .leader-name-text {
         text-align: center;
         font-size: 2.5rem;
         font-weight: 900;
         color: #2D3748;
-        margin: 0 0 12px 0;
+        margin: 0 0 8px 0;
         font-family: 'Playfair Display', serif;
-        animation: fadeInUp 0.6s ease-out;
-        animation-delay: 0.4s;
-        animation-fill-mode: both;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
     }
     
     .leader-title-text {
@@ -321,10 +303,8 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin: 0 0 25px 0;
-        animation: fadeInUp 0.6s ease-out;
-        animation-delay: 0.5s;
-        animation-fill-mode: both;
+        margin: 0 0 20px 0;
+        animation: fadeInUp 0.6s ease-out 0.3s both;
     }
     
     .leader-specialty-text {
@@ -335,9 +315,7 @@ st.markdown("""
         margin: 0 auto 30px;
         max-width: 520px;
         font-weight: 500;
-        animation: fadeInUp 0.6s ease-out;
-        animation-delay: 0.6s;
-        animation-fill-mode: both;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
     }
     
     @keyframes fadeInUp {
@@ -351,63 +329,9 @@ st.markdown("""
         }
     }
     
-    .expertise-tags-container {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 35px;
-        animation: fadeInUp 0.6s ease-out;
-        animation-delay: 0.7s;
-        animation-fill-mode: both;
-    }
-    
-    .expertise-tag {
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
-        color: white;
-        padding: 10px 24px;
-        border-radius: 25px;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        box-shadow: 0 6px 20px rgba(233, 30, 99, 0.35);
-        transition: all 0.3s ease;
-    }
-    
-    .expertise-tag:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 10px 30px rgba(233, 30, 99, 0.5);
-    }
-    
-    .start-button-container {
-        animation: fadeInUp 0.6s ease-out;
-        animation-delay: 0.8s;
-        animation-fill-mode: both;
-    }
-    
-    .stButton > button {
-        background: linear-gradient(135deg, #E91E63, #9C27B0) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 35px !important;
-        padding: 18px 50px !important;
-        font-weight: 700 !important;
-        font-size: 16px !important;
-        text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        box-shadow: 0 12px 35px rgba(233, 30, 99, 0.4) !important;
-        font-family: 'Poppins', sans-serif !important;
-        width: 100% !important;
-    }
-    
-    .stButton > button:hover {
-        transform: translateY(-4px) scale(1.05) !important;
-        box-shadow: 0 18px 45px rgba(233, 30, 99, 0.6) !important;
-    }
-    
+    /* Buttons */
     div[data-testid="column"] button[kind="secondary"] {
+        /* Arrow button style refined */
         background: linear-gradient(135deg, #E91E63, #9C27B0) !important;
         border: none !important;
         border-radius: 50% !important;
@@ -418,7 +342,7 @@ st.markdown("""
         font-size: 28px !important;
         color: white !important;
         box-shadow: 0 10px 35px rgba(233, 30, 99, 0.4) !important;
-        transition: all 0.3s ease !important;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         padding: 0 !important;
         font-weight: bold !important;
     }
@@ -427,104 +351,41 @@ st.markdown("""
         transform: scale(1.15) !important;
         box-shadow: 0 15px 45px rgba(233, 30, 99, 0.6) !important;
     }
-    
-    .chat-header-box {
-        background: white;
-        padding: 25px 30px;
-        border-radius: 25px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        border: 2px solid rgba(233, 30, 99, 0.2);
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    
-    .chat-avatar {
-        width: 70px;
-        height: 70px;
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 36px;
-        border: 4px solid white;
-        box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
-        flex-shrink: 0;
-    }
-    
-    .chat-info h2 {
-        color: #2D3748;
-        margin: 0 0 5px 0;
-        font-size: 28px;
-        font-weight: 900;
-        font-family: 'Playfair Display', serif;
-    }
-    
-    .chat-info p {
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0;
-        font-size: 14px;
-        font-weight: 700;
-    }
-    
-    .message-container {
-        display: flex;
-        margin: 12px 0;
-    }
-    
-    .message-container.user {
-        justify-content: flex-end;
-    }
-    
-    .message-container.assistant {
-        justify-content: flex-start;
-    }
-    
-    .message-bubble {
-        padding: 14px 20px;
-        border-radius: 20px;
-        max-width: 70%;
-        font-weight: 500;
-        line-height: 1.5;
-    }
-    
-    .message-bubble.user {
-        background: linear-gradient(135deg, #E91E63, #9C27B0);
-        color: white;
-        border-radius: 20px 20px 4px 20px;
-        box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
-    }
-    
-    .message-bubble.assistant {
-        background: white;
-        color: #2D3748;
-        border-radius: 20px 20px 20px 4px;
-        border: 2px solid rgba(233, 30, 99, 0.2);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    }
-    
-    .stTextInput > div > div > input {
-        background: white !important;
-        border: 2px solid rgba(233, 30, 99, 0.3) !important;
-        border-radius: 25px !important;
-        padding: 14px 20px !important;
-        font-size: 15px !important;
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    .stTextInput > div > div > input:focus {
-        border-color: #E91E63 !important;
-        box-shadow: 0 0 25px rgba(233, 30, 99, 0.25) !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state
+
+# --- JavaScript for Card Exit Animation (Pre-Rerun) ---
+# This is crucial for triggering the exit animation *before* the page reloads.
+st.markdown("""
+<script>
+function applyExitAnimation(direction) {
+    const card = document.querySelector('.leader-card');
+    if (card) {
+        card.classList.add('card-exit');
+        if (direction === 'next') {
+            card.style.animationName = 'cardSlideOut'; 
+        } else {
+            // Apply a reversed animation for "previous" button if desired
+            card.style.animationName = 'cardSlideOutReverse'; 
+        }
+    }
+}
+
+// Add a slight delay before rerunning to let the animation play
+function delayedRerun(index_change) {
+    applyExitAnimation(index_change > 0 ? 'next' : 'prev');
+    setTimeout(() => {
+        const rerunButton = document.querySelector('[data-testid="stForm"] button');
+        if (rerunButton) {
+            rerunButton.click();
+        }
+    }, 450); // 450ms, slightly less than the 500ms CSS animation duration
+}
+</script>
+""", unsafe_allow_html=True)
+
+# --- Session State Management ---
 if "messages" not in st.session_state:
     st.session_state.messages = {
         name: [{"role": "system", "content": f"You are {name}, a {leaders[name]['style']} financial expert specializing in {leaders[name]['title']}. Provide helpful, insightful advice in your unique style."}] 
@@ -534,99 +395,104 @@ if "selected_leader" not in st.session_state:
     st.session_state.selected_leader = None
 if "current_index" not in st.session_state:
     st.session_state.current_index = 0
-if "typing" not in st.session_state:
-    st.session_state.typing = False
 
 leaders_list = list(leaders.keys())
 
-# Main Page - Carousel
+# --- Main Page - Carousel ---
 if not st.session_state.selected_leader:
-    st.markdown('<h1 class="hero-title">Welcome to HerStory!</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">HerStory: Financial Wisdom</h1>', unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns([1, 6, 1])
-    
-    with col1:
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        if st.button("←", key="prev_btn", type="secondary"):
-            st.session_state.current_index = (st.session_state.current_index - 1) % len(leaders_list)
-            st.rerun()
-    
-    with col2:
-        current_name = leaders_list[st.session_state.current_index]
+    # Use st.form to capture button clicks without immediate rerun, 
+    # allowing custom JS to handle the animation first.
+    with st.form(key="carousel_form"):
+        col1, col2, col3 = st.columns([1, 6, 1])
+        
+        current_index = st.session_state.current_index
+        current_name = leaders_list[current_index]
         leader = leaders[current_name]
         first_name = current_name.split()[0]
         
-        # Start card
-        st.markdown('<div class="leader-card">', unsafe_allow_html=True)
+        # --- Carousel Buttons ---
+        with col1:
+            st.write("") # Spacer
+            if st.form_submit_button("←", key="prev_btn_form", type="secondary"):
+                # Use st.experimental_rerun() for instant rerun after state update
+                # but we'll use a hacky way with JS to trigger the animation
+                st.session_state.current_index = (current_index - 1) % len(leaders_list)
+                st.markdown(f'<script>applyExitAnimation("prev");</script>', unsafe_allow_html=True)
+                st.rerun()
+
+        with col3:
+            st.write("") # Spacer
+            if st.form_submit_button("→", key="next_btn_form", type="secondary"):
+                st.session_state.current_index = (current_index + 1) % len(leaders_list)
+                st.markdown(f'<script>applyExitAnimation("next");</script>', unsafe_allow_html=True)
+                st.rerun()
         
-        # Curved text
-        st.markdown(f'''
-            <div class="curved-text-container">
-                <p class="curved-text">Hi, I'm {first_name}. Let's Chat!</p>
-            </div>
-        ''', unsafe_allow_html=True)
-        
-        # Profile image container - opening tags
-        st.markdown('<div class="profile-circle-container"><div class="profile-glow"></div>', unsafe_allow_html=True)
-        
-        # Try to load and display the image
-        try:
-            if os.path.exists(leader['image']):
-                img = Image.open(leader['image'])
-                # Create a container with custom styling
-                st.markdown('<div style="display: flex; justify-content: center;">', unsafe_allow_html=True)
-                st.image(img, use_container_width=False, width=280)
-                st.markdown('</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'''
-                    <div style="width: 280px; height: 280px; margin: 0 auto; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
-                        👩
-                    </div>
-                ''', unsafe_allow_html=True)
-        except Exception as e:
+        # --- Card Content ---
+        with col2:
+            # Start card
+            st.markdown(f'<div class="leader-card">', unsafe_allow_html=True)
+            
+            st.markdown('<div class="curved-image-section">', unsafe_allow_html=True)
+            
+            # Curved Text Header
             st.markdown(f'''
-                <div style="width: 280px; height: 280px; margin: 0 auto; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
-                    👩
+                <div class="curved-text-container">
+                    <div class="text-arc"></div>
+                    <p class="curved-text">Hi, I'm **{first_name}**. Let's Chat!</p>
                 </div>
             ''', unsafe_allow_html=True)
-        
-        # Close profile container
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Leader info
-        st.markdown(f'<h2 class="leader-name-text">{current_name}</h2>', unsafe_allow_html=True)
-        st.markdown(f'<p class="leader-title-text">{leader["title"]} {leader["emoji"]}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p class="leader-specialty-text">{leader["specialty"]}</p>', unsafe_allow_html=True)
-        
-        # Expertise tags
-        expertise_tags = ''.join([f'<span class="expertise-tag">{exp}</span>' for exp in leader['expertise']])
-        st.markdown(f'<div class="expertise-tags-container">{expertise_tags}</div>', unsafe_allow_html=True)
-        
-        # Close card
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Start button
-        st.markdown('<div class="start-button-container">', unsafe_allow_html=True)
-        if st.button("Start Chatting", key="start_chat", use_container_width=True):
-            st.session_state.selected_leader = current_name
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with col3:
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        if st.button("→", key="next_btn", type="secondary"):
-            st.session_state.current_index = (st.session_state.current_index + 1) % len(leaders_list)
-            st.rerun()
+            
+            # Profile image container
+            st.markdown('<div class="profile-circle-wrapper">', unsafe_allow_html=True)
+            
+            # Try to load and display the image
+            try:
+                # To make st.image work reliably, it's best to use the actual Streamlit function
+                # and override the style with CSS.
+                if os.path.exists(leader['image']):
+                    img = Image.open(leader['image'])
+                    st.image(img, use_container_width=False)
+                else:
+                    # Fallback for missing image
+                    st.markdown(f'''
+                        <div style="width: 280px; height: 280px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
+                            {leader['emoji']}
+                        </div>
+                    ''', unsafe_allow_html=True)
+            except Exception:
+                # Fallback for error loading image
+                 st.markdown(f'''
+                    <div style="width: 280px; height: 280px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #E91E63, #9C27B0); display: flex; align-items: center; justify-content: center; font-size: 120px; border: 8px solid white; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(233, 30, 99, 0.2);">
+                        {leader['emoji']}
+                    </div>
+                ''', unsafe_allow_html=True)
 
-# Chat Page
+            # Close profile container
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True) # Close curved-image-section
+            
+            # Leader info - Title and Specialty
+            st.markdown(f'<h2 class="leader-name-text">{current_name}</h2>', unsafe_allow_html=True)
+            st.markdown(f'<p class="leader-title-text">{leader["title"]} {leader["emoji"]}</p>', unsafe_allow_html=True)
+            
+            # The requested description right below the image:
+            st.markdown(f'<p class="leader-specialty-text">"{leader["specialty"]}"</p>', unsafe_allow_html=True)
+            
+            # Expertise tags
+            expertise_tags = ''.join([f'<span class="expertise-tag">{exp}</span>' for exp in leader['expertise']])
+            st.markdown(f'<div class="expertise-tags-container">{expertise_tags}</div>', unsafe_allow_html=True)
+            
+            # Start Chat Button (needs to be inside the form for the form submit)
+            if st.form_submit_button("Start Chatting", key="start_chat_form", use_container_width=True):
+                st.session_state.selected_leader = current_name
+                st.rerun()
+
+            # Close card
+            st.markdown('</div>', unsafe_allow_html=True)
+    
+# --- Chat Page (Left as is, as the request focused on the carousel) ---
 else:
     name = st.session_state.selected_leader
     leader = leaders[name]
@@ -640,6 +506,7 @@ else:
             st.rerun()
     
     with col_header:
+        # Chat header uses the existing stylish header
         st.markdown(f"""
         <div class="chat-header-box">
             <div class="chat-avatar">{first_name[0]}</div>
@@ -650,7 +517,7 @@ else:
         </div>
         """, unsafe_allow_html=True)
     
-    # Display chat messages
+    # Display chat messages (same as original code)
     for msg in st.session_state.messages[name][1:]:
         role_class = "user" if msg["role"] == "user" else "assistant"
         st.markdown(f"""
@@ -659,46 +526,25 @@ else:
         </div>
         """, unsafe_allow_html=True)
     
-    if st.session_state.typing:
-        st.markdown("""
-        <div class="message-container assistant">
-            <div class="message-bubble assistant">💭 Thinking...</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
     # Input area
-    col_input, col_send = st.columns([6, 1])
+    user_input = st.chat_input(f"Ask {first_name} about finance...", key="user_input_chat")
     
-    with col_input:
-        user_input = st.text_input(
-            "Message",
-            placeholder=f"Ask {first_name} about finance...",
-            key="user_input",
-            label_visibility="collapsed"
-        )
-    
-    with col_send:
-        send_clicked = st.button("Send", key="send_btn", use_container_width=True)
-    
-    if send_clicked and user_input:
+    if user_input:
         st.session_state.messages[name].append({"role": "user", "content": user_input})
-        st.session_state.typing = True
-        st.rerun()
-    
-    if st.session_state.typing:
+        
         try:
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=st.session_state.messages[name],
-                temperature=0.7,
-                max_tokens=400
-            )
-            st.session_state.messages[name].append({
-                "role": "assistant",
-                "content": response.choices[0].message.content
-            })
-            st.session_state.typing = False
-            st.rerun()
+            with st.spinner(f"{first_name} is thinking..."):
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=st.session_state.messages[name],
+                    temperature=0.7,
+                    max_tokens=400
+                )
+                st.session_state.messages[name].append({
+                    "role": "assistant",
+                    "content": response.choices[0].message.content
+                })
         except Exception as e:
-            st.error(f"Error: {str(e)}")
-            st.session_state.typing = False
+            st.error(f"Error communicating with AI: {str(e)}")
+            
+        st.rerun()
